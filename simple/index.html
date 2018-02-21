@@ -51,10 +51,15 @@
 		}
 	</style>
 	<script>
-	var containerLeft = 0;
 
-	document.querySelector('.right').addEventListener('click', function sliderRight() {
-		var container = document.querySelector('.container');
+	// (function() {
+	// 	'use strict';
+	var containerLeft = 0;
+	var container = document.querySelector('.container');
+    var rightCl = document.querySelector('.right');
+    var leftCl = document.querySelector('.left');
+
+	rightCl.addEventListener('click', function() {
 		containerLeft = containerLeft - 300;
 		if(containerLeft <  -1200) {
 			containerLeft = 0; 
@@ -62,15 +67,14 @@
 		 container.style.left = containerLeft + 'px';	
 		});
 
-	document.querySelector('.left').addEventListener('click', function sliderLeft() {
-		var container = document.querySelector('.container');
+	leftCl.addEventListener('click', function() {
 		containerLeft = containerLeft + 300;
 		if(containerLeft ==  0) {
 			containerLeft = -1200; 
 		 } 
 		 container.style.left = containerLeft + 'px';	
 		});
-
+	
 	</script>
 </body>
 </html>
