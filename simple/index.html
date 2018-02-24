@@ -9,18 +9,19 @@
 
 	<div class="slider">
 		<div class="container">
-			<img src='img/icon-1.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-2.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-3.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-4.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-5.jpg' alt="" width="300px" height="200px">
+			<div class="slides">
+				<img src='img/icon-1.jpg' alt="" width="300px" height="200px">
+				<img src='img/icon-2.jpg' alt="" width="300px" height="200px">
+				<img src='img/icon-3.jpg' alt="" width="300px" height="200px">
+				<img src='img/icon-4.jpg' alt="" width="300px" height="200px">
+				<img src='img/icon-5.jpg' alt="" width="300px" height="200px">
+			</div>
 		</div>
 	</div>
 	<div class="btn-group">
 	  <button type="button" class="btn left">Левая</button>
 	  <button type="button" class="btn right">Правая</button>
 	</div>
-
 
 	<style>
 	.slider {
@@ -30,12 +31,20 @@
 		margin: 50px auto;
 		overflow: hidden;
 	}
+	.slides {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		transition: left 1s ease-in-out;
+	}
 	.container {
 		width: 1600px;
 		position: relative;
 	}
 	.container img {
 		float: left;
+		width: 300px;
+		height: 200px;
 	}		
 	.container::after {
 		content: '';
@@ -49,34 +58,93 @@
 		width: 70px;
 		height: 20px;
 		}
-	</style>
-	<script>
+</style>
+<script>
 
 	(function() {
-		'use strict';
-	var containerLeft = 0;
+
+	'use strict';
+
+//	var containerLeft = 0;
+//	var container = document.querySelector('.container');
+//	var rightCl = document.querySelector('.right');
+//	var leftCl = document.querySelector('.left');
+//	rightCl.addEventListener('click', function() {
+//		containerLeft = containerLeft - 300;
+//		if(containerLeft <  -1200) {
+//			containerLeft = 0;
+//		}
+//		container.style.left = containerLeft + 'px';
+//		container.style.transition = '1s ease-in-out';
+//	});
+//	leftCl.addEventListener('click', function() {
+//		containerLeft = containerLeft + 300;
+//		if(containerLeft ==  0) {
+//			containerLeft = -1200;
+//		}
+//		container.style.left = containerLeft + 'px';
+//		container.style.transition = '1s ease-in-out';
+//	});
+
+	var padding = 0;
 	var container = document.querySelector('.container');
     var rightCl = document.querySelector('.right');
     var leftCl = document.querySelector('.left');
+    var originImagesArrayLength = document.querySelectorAll('.slider img').length;
+    var slidesContainer = document.querySelector('.slides');
+    var srcArray = (function() {
+        var array = document.querySelectorAll('.slider img');
+        var srcArray = [];
+        for (var i = 0; i < originImagesArrayLength; i++) {
+            srcArray.push(array[i].getAttribute('src'));
+		}
+		return srcArray;
+	}());
+    var paddingPrev = 0;
+
+	function slideImage(direction) {
+	    if (direction === 'left') {
+	        padding += 300;
+		}
+		if (direction === 'right') {
+	        padding -= 300;
+		}
+		if (padding <= document.querySelectorAll('.slider img').length * -300) {
+	        addImages('next');
+		} else if (padding > 0) {
+            addImages('prev');
+            paddingPrev += originImagesArrayLength;
+            padding -= originImagesArrayLength * 300;
+		}
+        slidesContainer.style.left = padding + 'px';
+	}
+	function addImages(direction) {
+	    var currentWidth = document.querySelector('.container').offsetWidth;
+        document.querySelector('.container').style.width = (currentWidth + 1500) + 'px';
+        var preparedArray = srcArray.slice();
+        if (direction === 'prev') {
+            preparedArray.reverse();
+		}
+	    for (var i = 0; i < originImagesArrayLength; i++) {
+	        var image = document.createElement('img');
+	        image.src = preparedArray[i];
+	        if (direction === 'next') {
+                slidesContainer.appendChild(image);
+			} else if (direction === 'prev') {
+                slidesContainer.insertBefore(image, slidesContainer.firstChild);
+			}
+		}
+	}
 
 	rightCl.addEventListener('click', function() {
-		containerLeft = containerLeft - 300;
-		if(containerLeft <  -1200) {
-			containerLeft = 0; 
-		}
-		 container.style.left = containerLeft + 'px';	
-		 container.style.transition = '1s ease-in-out';
-		});
+        slideImage('right');
+	});
 
 	leftCl.addEventListener('click', function() {
-		containerLeft = containerLeft + 300;
-		if(containerLeft ==  0) {
-			containerLeft = -1200; 
-		 } 
-		 container.style.left = containerLeft + 'px';	
-		 container.style.transition = '1s ease-in-out';
-		});
+        slideImage('left')
+	});
+
 	}());
-	</script>
+</script>
 </body>
 </html>
