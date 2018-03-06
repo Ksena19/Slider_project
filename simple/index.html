@@ -3,41 +3,39 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Slider</title>
-	<!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
-</head>
-<body>
-
-	<div class="slider">
-		<div class="container">
-			<img src='img/icon-1.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-2.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-3.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-4.jpg' alt="" width="300px" height="200px">
-			<img src='img/icon-5.jpg' alt="" width="300px" height="200px">
-		</div>
-	</div>
-	<div class="btn-group">
-	  <button type="button" class="btn left">Левая</button>
-	  <button type="button" class="btn right">Правая</button>
-	</div>
-
-
 	<style>
+
+	*{
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+
+	}
+
+	.wrapper{
+	  width: 100%;
+		margin: 0 auto;
+	  background: #CF9B61;
+		padding: 50px;
+	}
 	.slider {
-		width: 300px;
-		height: 200px;
+		width: 259px;
+    height: 194px;
 		border: 2px solid black;
-		margin: 50px auto;
+		margin: 0 auto;
 		overflow: hidden;
 	}
-	.container {
+
+	.box {
 		width: 1600px;
 		position: relative;
+
 	}
-	.container img {
+	.box img {
 		float: left;
-	}		
-	.container::after {
+	}
+
+	.box::after {
 		content: '';
 		display: block;
 		clear: both;
@@ -50,33 +48,69 @@
 		height: 20px;
 		}
 	</style>
+	<!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
+</head>
+<body>
+
+<div class="wrapper">
+	<div class="slider">
+		<div class="box">
+			<img src='img/icon-1.jpg' alt="" width="300px" height="200px">
+		</div>
+	</div>
+</div>
+
+	<div class="btn-group">
+	  <button type="button" class="btn left">Левая</button>
+	  <button type="button" class="btn right">Правая</button>
+	</div>
+
+
+
 	<script>
 
 	(function() {
 		'use strict';
-	var containerLeft = 0;
-	var container = document.querySelector('.container');
-    var rightCl = document.querySelector('.right');
-    var leftCl = document.querySelector('.left');
+		var slider_content = document.querySelector('.box');
+		var right = document.querySelector('.right');
+		var left = document.querySelector('.left');
 
-	rightCl.addEventListener('click', function() {
-		containerLeft = containerLeft - 300;
-		if(containerLeft <  -1200) {
-			containerLeft = 0; 
+		var img = [
+			'img/icon-2.jpg',
+			'img/icon-3.jpg',
+			'img/icon-4.jpg',
+			'img/icon-5.jpg'
+		]
+
+		var i = img.length;
+		right.addEventListener('click', nextSlide);
+			function nextSlide(){
+			if( i < img.length) {
+				i = i + 1;
+
+			} else {
+				i = 1;
+			}
+			slider_content.innerHTML = '<img src=' + img[i-1] + '>';
+
+		};
+
+
+		left.addEventListener('click', prevSlide);
+		function prevSlide() {
+
+			if(i < img.length + 1 && i > 1) {
+				i = i -1;
+			} else {
+				i = img.length;
+			}
+			slider_content.innerHTML = '<img src=' + img[i-1] + '>';
 		}
-		 container.style.left = containerLeft + 'px';	
-		 container.style.transition = '1s ease-in-out';
-		});
+ setInterval(nextSlide, 2000);
+		}());
 
-	leftCl.addEventListener('click', function() {
-		containerLeft = containerLeft + 300;
-		if(containerLeft ==  0) {
-			containerLeft = -1200; 
-		 } 
-		 container.style.left = containerLeft + 'px';	
-		 container.style.transition = '1s ease-in-out';
-		});
-	}());
+
+
 	</script>
 </body>
 </html>
